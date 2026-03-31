@@ -1,0 +1,242 @@
+/* index.css
+   Ponto de entrada global dos estilos.
+   Importar o Tailwind CSS v4 com a nova directiva @import
+   Versão 1.2 — Sistema de Temperatura, Mobile, Mesa Cenário */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;900&display=swap');
+@import "tailwindcss";
+
+/* ─── Reset / Base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box; /* Tamanhos incluem padding e border */
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Fonte padrão do projecto */
+  background-color: #09090b;        /* Fundo quase preto (zinc-950) */
+  color: #f4f4f5;                   /* Texto claro padrão */
+  -webkit-font-smoothing: antialiased; /* Melhor renderização de texto */
+}
+
+/* ─── Scrollbar personalizada (look dark casino) ────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #18181b; /* zinc-900 */
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46; /* zinc-700 */
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dc2626; /* red-600 — cor de destaque do casino */
+}
+
+/* ─── Animações globais ─────────────────────────────────────────── */
+
+/* Fade + slide para cima (usado nas transições de jogos) */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeSlideUp {
+  animation: fadeSlideUp 0.35s ease forwards;
+}
+
+/* Pulse suave para elementos em destaque (ex: saldo a actualizar) */
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.animate-pulseSoft {
+  animation: pulseSoft 1.5s ease-in-out infinite;
+}
+
+/* Brilho dinâmico para os textos de saldo do StatBar */
+.glow-text-green {
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.8), 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.glow-text-red {
+  text-shadow: 0 0 20px rgba(248, 113, 113, 0.8), 0 0 10px rgba(248, 113, 113, 0.5);
+}
+
+/* Rodas das slots a girar */
+@keyframes spinReel {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+/* Chip de roulette a pulsear */
+@keyframes chipBounce {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.15); }
+}
+.animate-chipBounce {
+  animation: chipBounce 0.4s ease-in-out;
+}
+
+/* Toast de ganho/perda */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-toastIn {
+  animation: toastIn 0.3s ease forwards;
+}
+
+/* ─ JACKPOT Overlay ─────────────────────────────────── */
+@keyframes jackpotOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Confetti a cair do topo */
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+}
+
+/* Shimmer dourado no texto JACKPOT! */
+@keyframes goldShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Bounce do troféu e do texto */
+@keyframes jackpotBounce {
+  from { transform: scale(1)   translateY(0); }
+  to   { transform: scale(1.08) translateY(-8px); }
+}
+
+/* Flash nas bordas dos rolos */
+@keyframes jackpotBorder {
+  from { box-shadow: 0 0 20px rgba(250,204,21,0.6); }
+  to   { box-shadow: 0 0 60px rgba(250,204,21,1);   }
+}
+
+/* Bola de ivório a circular na roda da roleta */
+@keyframes ballSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Roleta Russa — revólver a girar durante o tambor */
+@keyframes revolverSpin {
+  0%   { transform: scale(-1,1) rotate(0deg);   }
+  100% { transform: scale(-1,1) rotate(360deg); }
+}
+
+/* Revólver a saltar/tremer na mão */
+@keyframes revolverBounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-4px); }
+}
+
+/* Personagem a cair ao ser atingida */
+@keyframes characterFall {
+  0%   { transform: rotate(0deg)   translateY(0);    opacity: 1; }
+  100% { transform: rotate(70deg)  translateY(20px); opacity: 0.5; }
+}
+
+/* Brilho vermelho genérico para hover de botões principais */
+.glow-red:hover {
+  box-shadow: 0 0 18px rgba(220, 38, 38, 0.55);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Brilho verde para botão de ganho */
+.glow-green:hover {
+  box-shadow: 0 0 18px rgba(22, 163, 74, 0.55);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Card glassmorphism — efeito vidro fosco */
+.glass-card {
+  background: rgba(24, 24, 27, 0.75);  /* zinc-900 semi-transparente */
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(63, 63, 70, 0.5); /* zinc-700 */
+  border-radius: 1rem;
+}
+
+/* ─── Sistema de Temperatura ────────────────────────────────── */
+
+/* Pulse animado para temperatura crítica (> 80°C) */
+@keyframes tempCritical {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+  50%       { opacity: 0.85; box-shadow: 0 0 20px rgba(239,68,68,1); }
+}
+.animate-tempCritical {
+  animation: tempCritical 0.8s ease-in-out infinite;
+}
+
+/* Gradiente suave para transições de cor do termómetro */
+@keyframes tempGlow {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.3); }
+}
+
+/* ─── Mobile / Responsivo ───────────────────────────────────── */
+
+/* Previne scroll horizontal em mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Touch targets mínimos para mobile */
+@media (max-width: 768px) {
+  button {
+    min-height: 40px;
+  }
+
+  /* Jogos: padding reduzido */
+  .game-container {
+    padding: 1rem;
+  }
+}
+
+/* ─── QuizModal ─────────────────────────────────────────────── */
+
+/* Entrada suave do modal */
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.animate-modalIn {
+  animation: modalIn 0.3s ease forwards;
+}
+
+/* ─── Mesa de Casino (cenário Slots) ────────────────────────── */
+
+/* Textura feltro subtil animada */
+@keyframes feltBreath {
+  0%, 100% { opacity: 0.06; }
+  50%       { opacity: 0.09; }
+}
+.animate-feltBreath {
+  animation: feltBreath 4s ease-in-out infinite;
+}
+
+/* ─── Big Bass — Bolhas a subir ─────────────────────────────── */
+@keyframes bubbleRise {
+  0%   { transform: translateY(0) scale(1);    opacity: 0.4; }
+  50%  { transform: translateY(-50vh) scale(1.1); opacity: 0.2; }
+  100% { transform: translateY(-110vh) scale(0.8); opacity: 0; }
+}
+
+
